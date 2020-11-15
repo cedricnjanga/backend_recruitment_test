@@ -9,19 +9,12 @@ module Mutations
     field :errors, [String], "The list of errors if it failed. Empty if succeed.", null: true
 
     def resolve(**options)
-      passenger_ride = DriverRide.new(**options)
-      if passenger_ride.save
-        p passenger_ride
-        {
-          driver_ride: passenger_ride,
-          errors: []
-        }
-      else
-        {
-          passenger_ride: nil,
-          errors: passenger_ride.errors.full_messages
-        }
-      end
+      result = CreateDriverRide.call(
+        options: options,
+        network: object
+      )
+
+      result.data
     end
   end
 end

@@ -9,18 +9,13 @@ module Mutations
     field :errors, [String], "The list of errors if it failed. Empty if succeed.", null: true
 
     def resolve(passenger_ride_id:, **options)
-      passenger_ride = PassengerRide.find(passenger_ride_id)
-      if passenger_ride.update(**options)
-        {
-          passenger_ride: passenger_ride,
-          errors: []
-        }
-      else
-        {
-          passenger_ride: nil,
-          errors: passenger_ride.errors.full_messages
-        }
-      end
+      result = ShareRide.call(
+        options: options,
+        passenger_ride_id: passenger_ride_id,
+        network: object
+      )
+      
+      result.data
     end
   end
 end
