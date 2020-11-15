@@ -1,6 +1,12 @@
 class User < ApplicationRecord
+  # Associations
+  belongs_to :network
   has_many :driver_rides
   has_many :passenger_rides
 
-  validates :email, presence: true
+  # Validations
+  validates_presence_of :email
+
+  # Scopes
+  scope :by_network, ->(network) { where(network: network) }
 end
